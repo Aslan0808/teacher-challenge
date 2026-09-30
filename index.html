@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Challenge 2026</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #08090c;
+    --card: #11141a;
+    --card2: #161a21;
+    --text: #f5f3ee;
+    --muted: #8e949e;
+    --gold: #d7b56d;
+    --gold2: #f0d99d;
+    --border: #292e37;
+    --green: #67b77b;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 85% 10%, rgba(215,181,109,.12), transparent 30%),
+        radial-gradient(circle at 10% 90%, rgba(70,100,150,.10), transparent 30%),
+        var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    font-family: inherit;
+}
+
+.app {
+    width: min(100%, 700px);
+    min-height: 100vh;
+    margin: auto;
+    padding: 24px;
+}
+
+.screen {
+    display: none;
+    min-height: calc(100vh - 48px);
+    flex-direction: column;
+    justify-content: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* ---------------- START ---------------- */
+
+.logo {
+    font-size: 13px;
+    letter-spacing: 5px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.year {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-top: 8px;
+}
+
+.big-star {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #5d4d31;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+    font-size: 32px;
+    margin: 70px 0 30px;
+    box-shadow: 0 0 60px rgba(215,181,109,.08);
+}
+
+.label {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+h1 {
+    font-size: clamp(42px, 10vw, 70px);
+    line-height: 1;
+    letter-spacing: -3px;
+}
+
+h1 span {
+    color: var(--gold);
+}
+
+.description {
+    color: #b7bbc2;
+    line-height: 1.7;
+    margin: 22px 0 30px;
+    font-size: 15px;
+}
+
+.primary {
+    border: none;
+    background: var(--gold);
+    color: #0a0b0e;
+    padding: 17px 22px;
+    border-radius: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.primary:hover {
+    transform: translateY(-2px);
+    background: var(--gold2);
+}
+
+.primary span {
+    margin-left: 25px;
+}
+
+/* ---------------- SUBJECTS ---------------- */
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    color: #777d87;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 45px;
+}
+
+h2 {
+    font-size: clamp(34px, 8vw, 52px);
+    letter-spacing: -2px;
+    line-height: 1.05;
+}
+
+.muted {
+    color: var(--muted);
+    margin-top: 14px;
+    line-height: 1.6;
+}
+
+.subjects {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.subject {
+    background: linear-gradient(145deg, #15181e, #0e1014);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 17px;
+    padding: 22px;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.subject:hover {
+    transform: translateY(-3px);
+    border-color: #695a3e;
+}
+
+.subject-icon {
+    display: block;
+    font-size: 27px;
+    margin-bottom: 20px;
+}
+
+.subject-name {
+    display: block;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.subject-info {
+    display: block;
+    color: #737983;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.subject:last-child {
+    grid-column: 1 / -1;
+}
+
+/* ---------------- CHALLENGE ---------------- */
+
+.progress {
+    height: 3px;
+    background: #20242b;
+    border-radius: 10px;
+    margin: -20px 0 40px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background: var(--gold);
+    transition: .4s;
+}
+
+.question {
+    background: linear-gradient(145deg, #15181e, #0d0f13);
+    border: 1px solid var(--border);
+    border-radius: 21px;
+    padding: 25px;
+    margin-top: 25px;
+}
+
+.question-title {
+    font-size: 23px;
+    line-height: 1.4;
+    margin-bottom: 22px;
+}
+
+.answers {
+    display: grid;
+    gap: 10px;
+}
+
+.answer {
+    border: 1px solid var(--border);
+    background: #11141a;
+    color: var(--text);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.answer:hover {
+    border-color: var(--gold);
+}
+
+.answer.correct {
+    border-color: var(--green);
+    background: rgba(103,183,123,.1);
+}
+
+.answer.wrong {
+    border-color: #b75f5f;
+    background: rgba(183,95,95,.1);
+}
+
+.feedback {
+    min-height: 25px;
+    margin-top: 15px;
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* ---------------- REACTION ---------------- */
+
+.reaction-area {
+    background: linear-gradient(145deg, #15181e, #0d0f13);
+    border: 1px solid var(--border);
+    border-radius: 21px;
+    padding: 30px;
+    margin-top: 25px;
+    text-align: center;
+}
+
+.reaction-button {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: none;
+    background: #252a31;
+    color: #777d87;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 30px auto;
+}
+
+.reaction-button.ready {
+    background: #4d965e;
+    color: white;
+    box-shadow: 0 0 80px rgba(77,150,94,.5);
+}
+
+/* ---------------- RESULT ---------------- */
+
+.success {
+    width: 76px;
+    height: 76px;
+    border: 1px solid #665537;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.score {
+    margin: 25px 0;
+    padding: 20px;
+    background: #11141a;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.score small {
+    color: var(--muted);
+    letter-spacing: 2px;
+}
+
+.score strong {
+    display: block;
+    color: var(--gold);
+    font-size: 30px;
+    margin-top: 8px;
+}
+
+/* ---------------- INVITATION ---------------- */
+
+.invitation {
+    background: linear-gradient(145deg, #17140f, #0d0f13);
+    border: 1px solid #625231;
+    border-radius: 23px;
+    padding: 28px;
+}
+
+.invitation-top {
+    display: flex;
+    justify-content: space-between;
+    color: #898274;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.invitation-star {
+    color: var(--gold);
+    font-size: 32px;
+    text-align: center;
+    margin: 35px 0 20px;
+}
+
+.invitation h2 {
+    font-size: 38px;
+    margin-bottom: 16px;
+}
+
+.invitation-text {
+    color: #b9bdc4;
+    line-height: 1.7;
+}
+
+.details {
+    margin: 25px 0;
+    border-top: 1px solid #39352e;
+    border-bottom: 1px solid #39352e;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 15px 0;
+    border-bottom: 1px solid #292827;
+}
+
+.detail:last-child {
+    border-bottom: none;
+}
+
+.detail span {
+    color: #77746d;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.detail strong {
+    text-align: right;
+    font-size: 13px;
+}
+
+.heart {
+    color: var(--gold);
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.signature {
+    color: #70757d;
+    font-size: 12px;
+    margin-top: 18px;
+}
+
+.secondary {
+    width: 100%;
+    margin-top: 15px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 15px;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
+@media(max-width: 520px) {
+
+    .app {
+        padding: 17px;
+    }
+
+    .screen {
+        min-height: calc(100vh - 34px);
+    }
+
+    .subjects {
+        grid-template-columns: 1fr;
+    }
+
+    .subject:last-child {
+        grid-column: auto;
+    }
+
+    .big-star {
+        margin-top: 45px;
+    }
+
+    .question {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= START ================= -->
+
+<section id="start" class="screen active">
+
+    <div class="logo">
+        TEACHER <span>CHALLENGE</span>
+    </div>
+
+    <div class="year">2026</div>
+
+    <div class="big-star">✦</div>
+
+    <div class="label">ҰСТАЗДАР КҮНІ</div>
+
+    <h1>
+        Сізге арналған<br>
+        <span>челлендж</span>
+    </h1>
+
+    <p class="description">
+        Пәніңізді таңдаңыз, шағын тапсырманы орындаңыз
+        және соңында сізді ерекше шақыру күтеді.
+    </p>
+
+    <button class="primary" onclick="show('subjects')">
+        БАСТАУ <span>→</span>
+    </button>
+
+</section>
+
+
+<!-- ================= SUBJECTS ================= -->
+
+<section id="subjects" class="screen">
+
+    <div class="top">
+        <span>TEACHER CHALLENGE</span>
+        <span>01 / 05</span>
+    </div>
+
+    <div class="label">ПӘНДІ ТАҢДАҢЫЗ</div>
+
+    <h2>Сіздің<br>челленджіңіз</h2>
+
+    <p class="muted">
+        Әр пәнге арнайы шағын тапсырма дайындалған.
+    </p>
+
+    <div class="subjects">
+
+        <button class="subject" onclick="startChallenge('english')">
+            <span class="subject-icon">🇬🇧</span>
+            <span class="subject-name">English</span>
+            <span class="subject-info">2 тапсырма</span>
+        </button>
+
+        <button class="subject" onclick="startChallenge('math')">
+            <span class="subject-icon">π</span>
+            <span class="subject-name">Математика</span>
+            <span class="subject-info">1 тапсырма</span>
+        </button>
+
+        <button class="subject" onclick="startChallenge('sport')">
+            <span class="subject-icon">⚡</span>
+            <span class="subject-name">Дене шынықтыру</span>
+            <span class="subject-info">Reaction test</span>
+        </button>
+
+        <button class="subject" onclick="startChallenge('it')">
+            <span class="subject-icon">⌘</span>
+            <span class="subject-name">Информатика</span>
+            <span class="subject-info">1 тапсырма</span>
+        </button>
+
+        <button class="subject" onclick="startChallenge('social')">
+            <span class="subject-icon">◎</span>
+            <span class="subject-name">Қоғамтану</span>
+            <span class="subject-info">1 тапсырма</span>
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CHALLENGE ================= -->
+
+<section id="challenge" class="screen">
+
+    <div class="top">
+        <span id="challengeName">CHALLENGE</span>
+        <span id="questionNumber">01 / 01</span>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div id="challengeBox"></div>
+
+</section>
+
+
+<!-- ================= RESULT ================= -->
+
+<section id="result" class="screen">
+
+    <div class="success">✓</div>
+
+    <div class="label">MISSION COMPLETE</div>
+
+    <h2 id="resultTitle">
+        Челлендж аяқталды!
+    </h2>
+
+    <p class="description" id="resultText"></p>
+
+    <div class="score">
+        <small>YOUR RESULT</small>
+        <strong id="score">100 XP</strong>
+    </div>
+
+    <button class="primary" onclick="show('invitation')">
+        ШАҚЫРУДЫ АШУ <span>→</span>
+    </button>
+
+</section>
+
+
+<!-- ================= INVITATION ================= -->
+
+<section id="invitation" class="screen">
+
+    <div class="invitation">
+
+        <div class="invitation-top">
+            <span>TEACHER CHALLENGE</span>
+            <span>2026</span>
+        </div>
+
+        <div class="invitation-star">✦</div>
+
+        <div class="label">АРНАЙЫ ШАҚЫРУ</div>
+
+        <h2>Құрметті ұстаз!</h2>
+
+        <p class="invitation-text">
+            Сізді <b>Ұстаздар күніне арналған
+            мерекелік іс-шараға</b> шақырамыз.
+        </p>
+
+        <div class="details">
+
+            <div class="detail">
+                <span>КҮНІ</span>
+                <strong id="eventDate">28.09.2026</strong>
+            </div>
+
+            <div class="detail">
+                <span>УАҚЫТЫ</span>
+                <strong id="eventTime">15:00</strong>
+            </div>
+
+            <div class="detail">
+                <span>МЕКЕНЖАЙЫ</span>
+                <strong id="eventAddress">
+                    Желтоқсан 78а
+                </strong>
+            </div>
+
+            <div class="detail">
+                <span>АУДИТОРИЯ</span>
+                <strong id="eventRoom">
+                    517
+                </strong>
+            </div>
+
+        </div>
+
+        <p class="heart">
+            Сізді асыға күтеміз! ❤️
+        </p>
+
+        <p class="signature">
+            Ізгі ниетпен, IT тобы
+        </p>
+
+    </div>
+
+    <button class="secondary" onclick="show('start')">
+        ↻ ҚАЙТА БАСТАУ
+    </button>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   ДАННЫЕ ЗАДАНИЙ
+========================================= */
+
+const challenges = {
+
+    english: {
+
+        name: "ENGLISH EDITION",
+
+        questions: [
+
+            {
+                question:
+                "Choose the correct sentence:",
+
+                answers: [
+                    "A good teacher always learn.",
+                    "A good teacher always learns.",
+                    "A good teacher always learning.",
+                    "A good teacher always learned."
+                ],
+
+                correct: 1
+            },
+
+            {
+                question:
+                "What does “Break a leg!” usually mean?",
+
+                answers: [
+                    "Be careful",
+                    "Good luck!",
+                    "Run faster",
+                    "Take a break"
+                ],
+
+                correct: 1
+            }
+
+        ],
+
+        message:
+        "Your English mode is still ON! 🇬🇧"
+
+    },
+
+
+    math: {
+
+        name: "МАТЕМАТИКА",
+
+        questions: [
+
+            {
+                question:
+                "2 → 6 → 12 → 20 → 30 → ?",
+
+                answers: [
+                    "36",
+                    "40",
+                    "42",
+                    "44"
+                ],
+
+                correct: 2
+            }
+
+        ],
+
+        message:
+        "Калькулятор бүгін демалды. 🧠"
+
+    },
+
+
+    sport: {
+
+        name: "ДЕНЕ ШЫНЫҚТЫРУ",
+
+        reaction: true,
+
+        message:
+        "Реакция әлі де формада! ⚡"
+
+    },
+
+
+    it: {
+
+        name: "ИНФОРМАТИКА",
+
+        questions: [
+
+            {
+                question:
+                "01001001 01010100 — бұл қандай сөз?",
+
+                answers: [
+                    "AI",
+                    "IT",
+                    "PC",
+                    "WEB"
+                ],
+
+                correct: 1
+            }
+
+        ],
+
+        message:
+        "SYSTEM HACKED ✓ 💻"
+
+    },
+
+
+    social: {
+
+        name: "ҚОҒАМТАНУ",
+
+        questions: [
+
+            {
+                question:
+                "Адам өз пікірін айтуға құқылы, бірақ басқа адамның құқығын бұзбауы керек. Бұл нені көрсетеді?",
+
+                answers: [
+                    "Құқық пен еркіндіктің байланысы",
+                    "Тек жауапкершілік",
+                    "Бәсекелестік",
+                    "Міндеттілік"
+                ],
+
+                correct: 0
+            }
+
+        ],
+
+        message:
+        "Критикалық ойлау: ONLINE. ◎"
+
+    }
+
+};
+
+
+/* =========================================
+   VARIABLES
+========================================= */
+
+let currentChallenge = null;
+let currentQuestion = 0;
+let points = 0;
+
+let reactionStart = 0;
+
+
+/* =========================================
+   SCREEN SWITCH
+========================================= */
+
+function show(id) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+
+            screen.classList.remove("active");
+
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+    window.scrollTo(0,0);
+}
+
+
+/* =========================================
+   START CHALLENGE
+========================================= */
+
+function startChallenge(type) {
+
+    currentChallenge = challenges[type];
+
+    currentQuestion = 0;
+    points = 0;
+
+    document.getElementById("challengeName")
+        .textContent = currentChallenge.name;
+
+    renderChallenge();
+
+    show("challenge");
+}
+
+
+/* =========================================
+   SHOW QUESTION
+========================================= */
+
+function renderChallenge() {
+
+    if (currentChallenge.reaction) {
+
+        renderReaction();
+
+        return;
+    }
+
+
+    const question =
+        currentChallenge.questions[currentQuestion];
+
+    const total =
+        currentChallenge.questions.length;
+
+
+    document.getElementById("questionNumber")
+        .textContent =
+        `${currentQuestion + 1} / ${total}`;
+
+
+    document.getElementById("progress")
+        .style.width =
+        `${(currentQuestion / total) * 100}%`;
+
+
+    let html = `
+
+        <div class="label">
+            ${currentChallenge.name}
+        </div>
+
+        <div class="question">
+
+            <div class="question-title">
+                ${question.question}
+            </div>
+
+            <div class="answers">
+
+    `;
+
+
+    question.answers.forEach((answer,index) => {
+
+        html += `
+
+            <button
+                class="answer"
+                onclick="answerQuestion(${index})">
+
+                ${answer}
+
+            </button>
+
+        `;
+
+    });
+
+
+    html += `
+
+            </div>
+
+            <div
+                class="feedback"
+                id="feedback">
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.getElementById("challengeBox")
+        .innerHTML = html;
+}
+
+
+/* =========================================
+   ANSWER
+========================================= */
+
+function answerQuestion(selected) {
+
+    const question =
+        currentChallenge.questions[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(button => {
+
+        button.disabled = true;
+
+    });
+
+
+    if (selected === question.correct) {
+
+        buttons[selected]
+            .classList.add("correct");
+
+        points++;
+
+        document.getElementById("feedback")
+            .textContent =
+            "✓ Дұрыс!";
+
+    } else {
+
+        buttons[selected]
+            .classList.add("wrong");
+
+        buttons[question.correct]
+            .classList.add("correct");
+
+        document.getElementById("feedback")
+            .textContent =
+            "Дұрыс жауап басқа нұсқа болды.";
+
+    }
+
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        if (
+            currentQuestion >=
+            currentChallenge.questions.length
+        ) {
+
+            finishChallenge();
+
+        } else {
+
+            renderChallenge();
+
+        }
+
+    },800);
+
+}
+
+
+/* =========================================
+   REACTION TEST
+========================================= */
+
+function renderReaction() {
+
+    document.getElementById("questionNumber")
+        .textContent = "01 / 01";
+
+    document.getElementById("progress")
+        .style.width = "0%";
+
+
+    document.getElementById("challengeBox")
+        .innerHTML = `
+
+        <div class="label">
+            REACTION TEST
+        </div>
+
+        <h2>
+            ${currentChallenge.name}
+        </h2>
+
+        <p class="description">
+            Жасыл түс пайда болған кезде
+            батырманы мүмкіндігінше тез басыңыз.
+        </p>
+
+        <div class="reaction-area">
+
+            <button
+                id="reactionButton"
+                class="reaction-button"
+                onclick="prepareReaction()">
+
+                ДАЙЫН
+
+            </button>
+
+            <div
+                class="feedback"
+                id="reactionFeedback">
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================
+   PREPARE REACTION
+========================================= */
+
+function prepareReaction() {
+
+    const button =
+        document.getElementById("reactionButton");
+
+    button.disabled = true;
+
+    button.textContent =
+        "КҮТІҢІЗ...";
+
+
+    const delay =
+        1200 + Math.random() * 3000;
+
+
+    setTimeout(() => {
+
+        button.disabled = false;
+
+        button.classList.add("ready");
+
+        button.textContent =
+            "БАСЫҢЫЗ!";
+
+        reactionStart =
+            performance.now();
+
+        button.onclick =
+            reactionClick;
+
+    },delay);
+
+}
+
+
+/* =========================================
+   REACTION CLICK
+========================================= */
+
+function reactionClick() {
+
+    const time =
+        ((performance.now() -
+        reactionStart) / 1000).toFixed(2);
+
+
+    points =
+        time < 0.50 ? 1 : 0;
+
+
+    document.getElementById(
+        "reactionFeedback"
+    ).textContent =
+        `⚡ ${time} секунд — нәтиже сақталды!`;
+
+
+    document.getElementById(
+        "reactionButton"
+    ).disabled = true;
+
+
+    setTimeout(() => {
+
+        finishChallenge();
+
+    },1000);
+
+}
+
+
+/* =========================================
+   FINISH
+========================================= */
+
+function finishChallenge() {
+
+    document.getElementById("progress")
+        .style.width = "100%";
+
+
+    const total =
+        currentChallenge.reaction
+        ? 1
+        : currentChallenge.questions.length;
+
+
+    let xp =
+        Math.round((points / total) * 100);
+
+
+    /*
+       Даже если ошибка,
+       учитель всё равно получает красивый результат.
+    */
+
+    if (xp < 60) {
+        xp = 80;
+    }
+
+
+    document.getElementById("resultTitle")
+        .textContent =
+        "Челлендж аяқталды!";
+
+
+    document.getElementById("resultText")
+        .textContent =
+        currentChallenge.message;
+
+
+    document.getElementById("score")
+        .textContent =
+        xp + " XP";
+
+
+    show("result");
+
+}
+
+
+/* =========================================
+   НАСТРОЙКИ ПРИГЛАШЕНИЯ
+=========================================
+
+   Здесь потом просто меняем данные.
+
+========================================= */
+
+const EVENT_DATE = "28.09.2026";
+const EVENT_TIME = "15:00";
+const EVENT_ADDRESS = "Желтоқсан 78а";
+const EVENT_ROOM = "517";
+
+
+document.getElementById("eventDate")
+    .textContent = EVENT_DATE;
+
+document.getElementById("eventTime")
+    .textContent = EVENT_TIME;
+
+document.getElementById("eventAddress")
+    .textContent = EVENT_ADDRESS;
+
+document.getElementById("eventRoom")
+    .textContent = EVENT_ROOM;
+
+</script>
+
+</body>
+</html>
